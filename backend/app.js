@@ -1,4 +1,4 @@
-module.exports = { playerListUpdate, turnUpdate };
+module.exports = { playerListUpdate, turnUpdate, roundUpdate };
 
 const express = require("express");
 const socket = require("socket.io");
@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
     roomid = roomid.toLowerCase();
     if (games[roomid] === undefined) {
       // io.to(socket.id).emit("invalid-room-id", null);
-      games[roomid] = new Game(roomid, 30000); //! 30000 is for dev purposes
+      games[roomid] = new Game(roomid, 5000); //! 30000 is for dev purposes
 
       socket.join(roomid);
       games[roomid].addPlayer(socket.id, playerName);
@@ -64,10 +64,35 @@ io.on("connection", (socket) => {
   socket.on("player-ready-state-update", (isReady) => {
     games[room].setPlayerReadyState(socket.id, isReady);
   });
+
+  socket.on("turn-end", () => {
+    console.log("turn end");
+    games[room].playNextTurn();
+  });
 });
 
 function playerListUpdate(roomid, playerList) {
   io.in(roomid).emit("player-list", playerList);
 }
 
-function turnUpdate(roomid, currentPlayerid, word, turnLength) {}
+function turnUpdate(roomid, currentPlayerid, word, turnLength) {
+  console.log("Turn update in room " + roomid);
+  io.in(roomid).emit("new-turn", { currentPlayerid, word });
+
+  let timeLeft = turnLength;
+  var turnCountDown = setInterval(function () {
+    io.in(roomid).emit("counter", {
+      timeLeft: timeLeft,
+      totalTime: turnLength,
+    });
+    timeLeft -= 1000;
+    if (timeLeft < 0) {
+      clearInterval(turnCountDown);
+      io.in(roomid).emit("times-up");
+    }
+  }, 1000);
+}
+
+function roundUpdate(roomid, roundIndex) {
+  io.in(roomid).emit("new-round", roundIndex);
+}

@@ -1,5 +1,5 @@
 const Player = require("./Player");
-const { playerListUpdate, turnUpdate } = require("./app");
+const { playerListUpdate, turnUpdate, roundUpdate } = require("./app");
 
 module.exports = class Game {
   constructor(roomid, turnLength) {
@@ -27,12 +27,19 @@ module.exports = class Game {
     /**
      * Words that still do need to be guessed
      */
-    this.wordsLeft;
+    this.wordsLeft = this.words;
 
     /**
      * Time per turn in ms
      */
     this.TURN_LENGTH = turnLength;
+
+    /**
+     * Counter for the rounds
+     */
+    this.roundIndex = 1;
+
+    this.nextRound();
   }
 
   /**
@@ -106,7 +113,7 @@ module.exports = class Game {
     this.wordsLeft = this.words;
     this.currentPlayerIndex = -1;
 
-    //TODO Notify the server of a new round
+    roundUpdate(this.roomid, this.roundIndex);
   }
 
   /**
@@ -121,8 +128,11 @@ module.exports = class Game {
    * Plays the next turn in the round
    *
    * Checks if the round is over before starting the turn
+   *
+   * Returns true if the next turn is beeing played
+   * Returns false if there's no more turn to player and a new round is starting
    */
-  playTurn() {
+  playNextTurn() {
     // checks if the round is over
     if (++this.currentPlayerIndex > this.players.length - 1) {
       this.nextRound();

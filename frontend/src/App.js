@@ -13,6 +13,7 @@ export default class App extends Component {
 
     this.componentDidMount = this.componentDidMount.bind(this);
     this.toggleReadyState = this.toggleReadyState.bind(this);
+    this.endTurn = this.endTurn.bind(this);
   }
 
   componentDidMount() {
@@ -24,12 +25,20 @@ export default class App extends Component {
       console.table(playerList);
     });
 
+    socket.on("new-round", (roundIndex) => {
+      console.log("new round " + roundIndex);
+    });
+
     socket.on("new-turn", ({ currentPlayerid, word }) => {
       console.log(currentPlayerid + " " + word);
     });
 
     socket.on("counter", ({ timeLeft, totalTime }) => {
       console.log(timeLeft + " / " + totalTime);
+    });
+
+    socket.on("times-up", () => {
+      console.log("time's up");
     });
 
     this.setState({ socket });
@@ -40,6 +49,10 @@ export default class App extends Component {
     this.setState({ isReady: !this.state.isReady });
   }
 
+  endTurn() {
+    this.state.socket.emit("turn-end");
+  }
+
   render() {
     return (
       <div>
@@ -47,6 +60,7 @@ export default class App extends Component {
         <button onClick={this.toggleReadyState}>
           {this.state.isReady ? "Unready" : "Ready"}
         </button>
+        <button onClick={this.endTurn}>End Turn</button>
       </div>
     );
   }
