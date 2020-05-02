@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import ProgressBar from "../components/ProgressBar";
 
-import "./RoundStart.css";
+import styles from "./RoundStart.module.css";
 
 export default class RoundStart extends Component {
   constructor(props) {
@@ -15,15 +15,17 @@ export default class RoundStart extends Component {
 
   render() {
     return (
-      <div className="game-page">
+      <div className={styles["game-page"]}>
         <h1>Ronde 1: Explications</h1>
-        <div className="play-zone">
+        <div className={styles["play-zone"]}>
           <p>Jean-Marles</p>
         </div>
-        <div className="start-button-wrapper">
-          <button className="start-button">Commencer</button>
+        <div className={styles["start-button-wrapper"]}>
+          <button className={styles["start-button"]}>Commencer</button>
         </div>
-        <ProgressBar className="progress-bar" percentage={this.state.percentage} />
+        <div className={styles["progress-bar"]}>
+          <ProgressBar percentage={this.state.percentage} />
+        </div>
       </div>
     );
   }
