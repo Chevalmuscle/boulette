@@ -1,0 +1,51 @@
+html,
+body {
+  height: 100%;
+}
+
+h1 {
+  margin: 0;
+}
+#root {
+  height: 100%;
+}
+.game-page {
+  display: flex;
+  flex-flow: column;
+  height: calc(100% - 88px);
+  padding: 44px;
+}
+
+.play-zone {
+  margin-bottom: calc(180px - 44px);
+  flex-grow: 1;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-size: 4em;
+}
+
+.progress-bar {
+  position: absolute;
+  height: 28px;
+  left: 44px;
+  right: 44px;
+  bottom: 60px;
+}
+
+.start-button-wrapper {
+  position: absolute;
+  width: auto;
+  height: 48px;
+  left: 44px;
+  right: 44px;
+  bottom: 140px;
+}
+
+.start-button {
+  font-size: 1.5em;
+  width: 100%;
+  height: 100%;
+  color: white;
+  background-color: #219653;
+}
