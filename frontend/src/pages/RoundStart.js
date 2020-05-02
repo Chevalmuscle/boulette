@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import ProgressBar from "../components/ProgressBar";
 
-import "./Game.css";
+import "./RoundStart.css";
 
-export default class Game extends Component {
+export default class RoundStart extends Component {
   constructor(props) {
     super(props);
 
