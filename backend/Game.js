@@ -48,9 +48,9 @@ module.exports = class Game {
    * @param {boolean} isReady new ready state for the player
    */
   setPlayerReadyState(playerid, isReady) {
-    this.players
-      .findIndex((player) => player.id === playerid)
-      .setIsReady(isReady);
+    this.players[
+      this.players.findIndex((player) => player.id === playerid)
+    ].setIsReady(isReady);
     playerListUpdate(this.roomid, this.players);
   }
 
