@@ -22,7 +22,7 @@ module.exports = class Game {
     /**
      * Words that can be used during the game
      */
-    this.words;
+    this.words = ["orange", "cat", "water", "magic"]; //! Hardcoded for dev purposes
 
     /**
      * Words that still do need to be guessed
