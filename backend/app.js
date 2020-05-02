@@ -69,15 +69,29 @@ io.on("connection", (socket) => {
     console.log("turn end");
     games[room].playNextTurn();
   });
+
+  socket.on("guessed-word", (word) => {
+    console.log("guess");
+    games[room].removeWordToRound(word);
+    io.to(socket.id).emit("new-word", games[room].getRandomWord());
+  });
+
+  socket.on("guessed-word-turn-end", ({ word, hasGuessed }) => {
+    console.log("guess on end");
+    if (hasGuessed === true) {
+      games[room].removeWordToRound(word);
+    }
+  });
 });
 
 function playerListUpdate(roomid, playerList) {
   io.in(roomid).emit("player-list", playerList);
 }
 
-function turnUpdate(roomid, currentPlayerid, word, turnLength) {
+function turnUpdate(roomid, currentPlayerid, turnLength) {
   console.log("Turn update in room " + roomid);
-  io.in(roomid).emit("new-turn", { currentPlayerid, word });
+  io.in(roomid).emit("new-turn", currentPlayerid);
+  io.to(currentPlayerid).emit("new-word", games[roomid].getRandomWord());
 
   let timeLeft = turnLength;
   var turnCountDown = setInterval(function () {

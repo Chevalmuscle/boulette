@@ -27,7 +27,7 @@ module.exports = class Game {
     /**
      * Words that still do need to be guessed
      */
-    this.wordsLeft = this.words;
+    this.wordsLeft = [...this.words];
 
     /**
      * Time per turn in ms
@@ -106,13 +106,14 @@ module.exports = class Game {
    * @param {string} word word to be removed
    */
   removeWordToRound(word) {
-    this.wordsLeft.splice(this.wordsLeft.findIndex(word), 1);
+    this.wordsLeft.splice(this.wordsLeft.indexOf(word), 1);
+    console.table(this.wordsLeft);
   }
 
   nextRound() {
-    this.wordsLeft = this.words;
+    this.wordsLeft = [...this.words];
     this.currentPlayerIndex = -1;
-
+    this.roundIndex++;
     roundUpdate(this.roomid, this.roundIndex);
   }
 
@@ -134,17 +135,18 @@ module.exports = class Game {
    */
   playNextTurn() {
     // checks if the round is over
-    if (++this.currentPlayerIndex > this.players.length - 1) {
+    if (this.wordsLeft.length <= 0) {
       this.nextRound();
       return;
     }
 
-    const currentWord = this.getRandomWord();
+    // sets next player
+    if (++this.currentPlayerIndex > this.players.length - 1)
+      this.currentPlayerIndex = 0;
 
     turnUpdate(
       this.roomid,
       this.players[this.currentPlayerIndex].id,
-      currentWord,
       this.TURN_LENGTH,
     );
   }
