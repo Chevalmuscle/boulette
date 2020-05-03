@@ -29,7 +29,11 @@ export default class WordsForm extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.props.handleSubmit([this.state.word1, this.state.word2, this.state.word3, this.state.word4, this.state.word5]);
+    const words = [];
+    for (let i = 0; i < WORD_COUNT; i++) {
+      words.push(this.state[`word${i}`]);
+    }
+    this.props.handleSubmit(words);
   }
 
   renderInputs() {
