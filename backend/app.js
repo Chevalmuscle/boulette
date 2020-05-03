@@ -2,7 +2,7 @@ module.exports = { playerListUpdate, turnUpdate, roundUpdate };
 
 const express = require("express");
 const socket = require("socket.io");
-const Game = require("./game");
+const Game = require("./Game");
 
 const app = express();
 const port = process.env.PORT || 3001;
