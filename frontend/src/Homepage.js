@@ -47,8 +47,12 @@ export default class Homepage extends Component {
           <div>
             Turn length (in seconds):
             <select onChange={this.handleOnChange} name="turnLength" value={this.state.turnLength}>
-              {turnLengthOptions.map((turnLengthOption) => {
-                return <option value={turnLengthOption}>{turnLengthOption}</option>;
+              {turnLengthOptions.map((turnLengthOption, i) => {
+                return (
+                  <option key={i} value={turnLengthOption}>
+                    {turnLengthOption}
+                  </option>
+                );
               })}
             </select>
           </div>
