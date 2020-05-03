@@ -38,6 +38,17 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("new-room-id", roomid);
   });
 
+  socket.on("request-game-list", () => {
+    const cleanedGameList = Object.keys(games).map((roomid) => {
+      return {
+        roomid: games[roomid].roomid,
+        players: games[roomid].players,
+        currentRoundIndex: games[roomid].roundIndex,
+      };
+    });
+    io.to(socket.id).emit("game-list", cleanedGameList);
+  });
+
   socket.on("join-room", ({ roomid, playerName }) => {
     roomid = roomid.toLowerCase();
     if (games[roomid] === undefined) {
