@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 
+import ChooseWords from "./pages/ChooseWords";
 import Play from "./pages/Play";
 import Spectate from "./pages/Spectate";
 import RoundStart from "./pages/RoundStart";
@@ -21,16 +22,17 @@ export default class App extends Component {
       totalTime: undefined,
       timeLeft: undefined,
       timeIsOver: false,
-
-      gameState: "round",
+      players: [],
+      gameState: "choose-words",
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
-    this.toggleReadyState = this.toggleReadyState.bind(this);
+    this.setReadyState = this.setReadyState.bind(this);
     this.handleRoundStart = this.handleRoundStart.bind(this);
     this.handleGuessed = this.handleGuessed.bind(this);
     this.handleFailed = this.handleFailed.bind(this);
     this.gameStart = this.gameStart.bind(this);
+    this.handleSubmitWords = this.handleSubmitWords.bind(this);
   }
 
   componentDidMount() {
@@ -47,12 +49,13 @@ export default class App extends Component {
 
     socket.on("player-list", (playerList) => {
       console.table(playerList);
+      this.setState({ players: playerList });
     });
 
     socket.on("new-round", (roundIndex) => {
       console.log("new round " + roundIndex);
 
-      this.toggleReadyState();
+      this.setReadyState(false);
       this.setState({ gameState: "round" });
     });
 
@@ -80,9 +83,9 @@ export default class App extends Component {
     this.setState({ socket });
   }
 
-  toggleReadyState() {
+  setReadyState(isReady) {
     this.state.socket.emit("player-ready-state-update", !this.state.isReady);
-    this.setState({ isReady: !this.state.isReady });
+    this.setState({ isReady: isReady });
   }
 
   gameStart(currentPlayerid) {
@@ -95,10 +98,14 @@ export default class App extends Component {
     }
   }
 
+  handleSubmitWords(isReady, words) {
+    this.setReadyState(isReady);
+    console.log(words);
+  }
+
   handleRoundStart(e) {
     e.preventDefault();
-    this.toggleReadyState();
-    // this.state.socket.emit("turn-end");
+    this.setReadyState(true);
   }
 
   handleGuessed(e) {
@@ -148,21 +155,27 @@ export default class App extends Component {
         case "spectating":
           return <Spectate playZoneText={"(Tour de Bob Gratton)"} />;
         default:
-          return <div>{`game state: ${gameState}`}</div>;
+          return <div>{`game state: ${this.state.gameState}`}</div>;
       }
     })();
     return (
-      <div className={styles["container"]}>
-        <h1>Ronde 1: Explications</h1>
-        <div className={styles["content-container"]}>
-          <div className={styles["my_content"]}>{gameState}</div>
-          <div className={styles["push"]}></div>
-        </div>
-        <div className={styles["footer"]}>
-          <div className={styles["progress-bar"]}>
-            <ProgressBar percentage={(this.state.timeLeft / this.state.totalTime) * 100} />
+      <div>
+        {this.state.gameState === "choose-words" ? (
+          <ChooseWords handleSubmitWords={this.handleSubmitWords} players={this.state.players} />
+        ) : (
+          <div className={styles["container"]}>
+            <h1>Ronde 1: Explications</h1>
+            <div className={styles["content-container"]}>
+              <div className={styles["my_content"]}>{gameState}</div>
+              <div className={styles["push"]}></div>
+            </div>
+            <div className={styles["footer"]}>
+              <div className={styles["progress-bar"]}>
+                <ProgressBar percentage={(this.state.timeLeft / this.state.totalTime) * 100} />
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

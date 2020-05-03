@@ -7,3 +7,11 @@
   font-size: 2em;
   margin-bottom: 24px;
 }
+
+.ready-state {
+  color: #219653;
+}
+
+.not-ready-state {
+  color: #eb5757;
+}

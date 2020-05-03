@@ -5,21 +5,40 @@ import WordsForm from "../components/WordsForm";
 import "./ChooseWords.css";
 
 export default class ChooseWords extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReady: false,
+    };
+    this.handleSubmitWords = this.handleSubmitWords.bind(this);
+  }
+
+  handleSubmitWords(words) {
+    this.props.handleSubmitWords(!this.state.isReady, words);
+    this.setState({ isReady: !this.state.isReady });
+  }
+
   render() {
     return (
       <div id="choose-words">
         <div>
           <h1 id="title">Propose 5 mots !</h1>
-          <WordsForm className="word-form" isReady={false} />
+          <WordsForm
+            handleSubmit={this.handleSubmitWords}
+            className={`word-form ${this.state.isReady ? "ready-state" : "not-ready-state"}`}
+            isReady={this.state.isReady}
+          />
         </div>
         <div>
           <h2 id="player-title">Joueurs</h2>
           <ul>
-            <li>Joueur 1</li>
-            <li>Joueur 2</li>
-            <li>Joueur 3</li>
-            <li>Joueur 4</li>
-            <li>Joueur 5</li>
+            {this.props.players.map((player) => {
+              return (
+                <li key={player.id} className={player.isReady ? "ready-state" : "not-ready-state"}>
+                  {player.name}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
