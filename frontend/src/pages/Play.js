@@ -10,7 +10,7 @@ export default class Play extends Component {
           <div className={styles["game-text"]}>{this.props.playZoneText}</div>
           <div className={styles["push"]}></div>
         </div>
-        <section class={styles["footer"]}>
+        <section className={styles["footer"]}>
           {this.props.end && (
             <div className={styles["fail-button-wrapper"]}>
               <button onClick={this.props.handleFailed} id={styles["fail-button"]} className={styles["button"]}>

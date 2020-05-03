@@ -10,9 +10,9 @@ export default class RoundStart extends Component {
           <div className={styles["game-text"]}>{this.props.explanationText}</div>
           <div className={styles["push"]}></div>
         </div>
-        <section class={styles["footer"]}>
+        <section className={styles["footer"]}>
           <div className={styles["start-button-wrapper"]}>
-            <button onClick={this.props.handleGuessed} id={styles["start-button"]} className={styles["button"]}>
+            <button onClick={this.props.handleStart} id={styles["start-button"]} className={styles["button"]}>
               Commencer
             </button>
           </div>
