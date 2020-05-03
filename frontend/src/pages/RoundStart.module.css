@@ -5,17 +5,11 @@
 }
 
 .play-zone {
-  opacity: 100%;
   font-size: 1em;
   margin-right: auto;
   margin-left: auto;
   position: relative;
   min-height: 100%;
-}
-
-.hide {
-  opacity: 50%;
-  transition: opacity 5s linear;
 }
 
 .footer {
