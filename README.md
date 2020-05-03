@@ -4,7 +4,7 @@ The frontend and the backend are in 2 separated folder and are both nodes projec
 
 This project is heavily relying on [socket.io](https://socket.io/) in other to exchange data about the game.
 
-## Sockets exchanges
+## Sockets exchanged
 
 ### From frontend to backend
 
