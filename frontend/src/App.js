@@ -88,6 +88,11 @@ export default class App extends Component {
     this.setState({ isReady: isReady });
   }
 
+  setReadyToStartGameState(isReady, words) {
+    this.state.socket.emit("player-ready-to-start-update", { isReady, words });
+    this.setState({ isReady: isReady });
+  }
+
   gameStart(currentPlayerid) {
     if (currentPlayerid === this.state.playerid) {
       // the player is playing
@@ -99,8 +104,7 @@ export default class App extends Component {
   }
 
   handleSubmitWords(isReady, words) {
-    this.setReadyState(isReady);
-    console.log(words);
+    this.setReadyToStartGameState(isReady, words);
   }
 
   handleRoundStart(e) {

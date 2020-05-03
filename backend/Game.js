@@ -22,12 +22,12 @@ module.exports = class Game {
     /**
      * Words that can be used during the game
      */
-    this.words = ["orange", "cat", "water", "magic"]; //! Hardcoded for dev purposes
+    this.words = {};
 
     /**
      * Words that still do need to be guessed
      */
-    this.wordsLeft = [...this.words];
+    this.wordsLeft = [];
 
     /**
      * Time per turn in ms
@@ -37,7 +37,7 @@ module.exports = class Game {
     /**
      * Counter for the rounds
      */
-    this.roundIndex = 1;
+    this.roundIndex = 0;
 
     this.nextRound();
   }
@@ -101,6 +101,22 @@ module.exports = class Game {
     playerListUpdate(this.roomid, this.players);
   }
 
+  addPlayersWords(playerid, words) {
+    this.words[playerid] = words;
+  }
+
+  removePlayersWords(playerid) {
+    this.words[playerid] = [];
+  }
+
+  getWords() {
+    let words = [];
+    for (let playerid in this.words) {
+      words = words.concat(this.words[playerid]);
+    }
+    return words;
+  }
+
   /**
    * Removes a word from the round
    * @param {string} word word to be removed
@@ -111,18 +127,10 @@ module.exports = class Game {
   }
 
   nextRound() {
-    this.wordsLeft = [...this.words];
+    this.wordsLeft = this.getWords();
     this.currentPlayerIndex = -1;
     this.roundIndex++;
     roundUpdate(this.roomid, this.roundIndex);
-  }
-
-  /**
-   * Adds the words in the game
-   * @param {string[]} words list of the words to be used in the games
-   */
-  addWords(words) {
-    this.words = words;
   }
 
   /**

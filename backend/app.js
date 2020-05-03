@@ -69,6 +69,19 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("player-ready-to-start-update", ({ isReady, words }) => {
+    games[room].setPlayerReadyState(socket.id, isReady);
+    if (isReady) {
+      games[room].addPlayersWords(socket.id, words);
+    } else {
+      games[room].removePlayersWords(socket.id);
+    }
+
+    if (games[room].arePlayersReady()) {
+      games[room].playNextTurn();
+    }
+  });
+
   socket.on("turn-end", () => {
     console.log("turn end");
     games[room].playNextTurn();
