@@ -82,11 +82,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("turn-end", () => {
-    console.log("turn end");
-    games[room].playNextTurn();
-  });
-
   socket.on("guessed-word", (word) => {
     console.log("guess");
     games[room].removeWordToRound(word);
@@ -94,10 +89,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("guessed-word-turn-end", ({ word, hasGuessed }) => {
-    console.log("guess on end");
+    console.log("turn end");
     if (hasGuessed === true) {
       games[room].removeWordToRound(word);
     }
+    games[room].playNextTurn();
   });
 });
 

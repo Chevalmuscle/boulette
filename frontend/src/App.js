@@ -119,7 +119,6 @@ export default class App extends Component {
         word: this.state.word,
         hasGuessed: true,
       });
-      this.state.socket.emit("turn-end");
     } else {
       this.state.socket.emit("guessed-word", this.state.word);
     }
@@ -132,7 +131,6 @@ export default class App extends Component {
       word: this.state.word,
       hasGuessed: false,
     });
-    this.state.socket.emit("turn-end");
   }
 
   render() {
