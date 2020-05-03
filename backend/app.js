@@ -63,6 +63,10 @@ io.on("connection", (socket) => {
 
   socket.on("player-ready-state-update", (isReady) => {
     games[room].setPlayerReadyState(socket.id, isReady);
+
+    if (games[room].arePlayersReady()) {
+      games[room].playNextTurn();
+    }
   });
 
   socket.on("turn-end", () => {

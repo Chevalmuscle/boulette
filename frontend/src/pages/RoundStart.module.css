@@ -44,7 +44,12 @@
   height: 100%;
 }
 
-#start-button {
+#get-ready-button {
   color: white;
   background-color: #219653;
+}
+
+#get-not-ready-button {
+  color: white;
+  background-color: #eb5757;
 }

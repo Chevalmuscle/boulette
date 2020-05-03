@@ -51,7 +51,9 @@ export default class App extends Component {
 
     socket.on("new-round", (roundIndex) => {
       console.log("new round " + roundIndex);
-      this.setState({ gameState: "round", isReady: false });
+
+      this.toggleReadyState();
+      this.setState({ gameState: "round" });
     });
 
     socket.on("new-turn", (currentPlayerid) => {
@@ -95,7 +97,8 @@ export default class App extends Component {
 
   handleRoundStart(e) {
     e.preventDefault();
-    this.state.socket.emit("turn-end");
+    this.toggleReadyState();
+    // this.state.socket.emit("turn-end");
   }
 
   handleGuessed(e) {
@@ -129,6 +132,7 @@ export default class App extends Component {
             <RoundStart
               handleStart={this.handleRoundStart}
               explanationText={"Vous devez expliquer le mot qui sera affiché"}
+              isReady={this.state.isReady}
             />
           );
         case "playing":

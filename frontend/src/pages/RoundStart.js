@@ -12,8 +12,12 @@ export default class RoundStart extends Component {
         </div>
         <section className={styles["footer"]}>
           <div className={styles["start-button-wrapper"]}>
-            <button onClick={this.props.handleStart} id={styles["start-button"]} className={styles["button"]}>
-              Commencer
+            <button
+              onClick={this.props.handleStart}
+              id={this.props.isReady ? styles["get-not-ready-button"] : styles["get-ready-button"]}
+              className={styles["button"]}
+            >
+              {this.props.isReady ? "Pas prêt" : "Prêt"}
             </button>
           </div>
         </section>
