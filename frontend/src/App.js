@@ -9,7 +9,7 @@ import ProgressBar from "./components/ProgressBar";
 
 import styles from "./App.module.css";
 
-const SOCKETIO_ENDPOINT = process.env.REACT_APP_BACKEND_URL;
+import { SOCKETIO_ENDPOINT } from "./config";
 
 export default class App extends Component {
   constructor(props) {
@@ -39,13 +39,17 @@ export default class App extends Component {
     const roomid = new URLSearchParams(this.props.location.search).get("room");
 
     if (roomid === null) {
-      this.props.history.push("/");
+      this.redirectToHomePage();
       return;
     }
     const socket = socketIOClient(SOCKETIO_ENDPOINT);
     socket.on("connect", () => this.setState({ playerid: socket.id }));
 
     socket.emit("join-room", { roomid: roomid, playerName: "bob" });
+
+    socket.on("invalid-room-id", () => {
+      this.redirectToHomePage();
+    });
 
     socket.on("player-list", (playerList) => {
       console.table(playerList);
@@ -81,6 +85,11 @@ export default class App extends Component {
     });
 
     this.setState({ socket });
+  }
+
+  redirectToHomePage() {
+    alert("Please generate a game first");
+    this.props.history.push("/");
   }
 
   setReadyState(isReady) {

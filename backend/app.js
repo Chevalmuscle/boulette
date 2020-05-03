@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 const games = {};
+const ROOM_ID_LENGTH = 5;
 
 /**
  * Delay before an empty game gets deleted (in ms)
@@ -28,20 +29,24 @@ io.on("connection", (socket) => {
   console.log("New connection " + socket.id);
   let room;
 
+  socket.on("request-new-room", ({ turnLength }) => {
+    const roomid = generateRoomid(ROOM_ID_LENGTH);
+    games[roomid] = new Game(
+      roomid,
+      turnLength * 1000, // convert from seconds to ms
+    );
+    io.to(socket.id).emit("new-room-id", roomid);
+  });
+
   socket.on("join-room", ({ roomid, playerName }) => {
-    room = roomid;
     roomid = roomid.toLowerCase();
     if (games[roomid] === undefined) {
-      // io.to(socket.id).emit("invalid-room-id", null);
-      games[roomid] = new Game(roomid, 5000); //! 30000 is for dev purposes
-
-      socket.join(roomid);
-      games[roomid].addPlayer(socket.id, playerName);
+      io.to(socket.id).emit("invalid-room-id", null);
     } else {
       socket.join(roomid);
       games[roomid].addPlayer(socket.id, playerName);
+      room = roomid;
     }
-    room = roomid;
   });
 
   socket.on("disconnect", () => {
@@ -96,6 +101,26 @@ io.on("connection", (socket) => {
     games[room].playNextTurn();
   });
 });
+
+/**
+ * Generates a new room id
+ * Comes from https://stackoverflow.com/a/1349426
+ */
+function generateRoomid(roomidLength) {
+  let isUnique = true;
+  let roomid;
+
+  do {
+    roomid = "";
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < roomidLength; i++) {
+      roomid += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    isUnique = games[roomid] === undefined;
+  } while (!isUnique);
+
+  return roomid;
+}
 
 function playerListUpdate(roomid, playerList) {
   io.in(roomid).emit("player-list", playerList);
