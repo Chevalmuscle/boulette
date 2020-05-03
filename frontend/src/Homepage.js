@@ -5,7 +5,7 @@ import { SOCKETIO_ENDPOINT } from "./config";
 
 import styles from "./Homepage.css";
 
-const turnLengths = [20, 30, 45, 60, 90, 120, 150, 180, 210, 240];
+const turnLengthOptions = [20, 30, 45, 60, 90, 120, 150, 180, 210, 240];
 
 export default class Homepage extends Component {
   constructor(props) {
@@ -47,8 +47,8 @@ export default class Homepage extends Component {
           <div>
             Turn length (in seconds):
             <select onChange={this.handleOnChange} name="turnLength" value={this.state.turnLength}>
-              {turnLengths.map((turnLength) => {
-                return <option value={turnLength}>{turnLength}</option>;
+              {turnLengthOptions.map((turnLengthOption) => {
+                return <option value={turnLengthOption}>{turnLengthOption}</option>;
               })}
             </select>
           </div>
