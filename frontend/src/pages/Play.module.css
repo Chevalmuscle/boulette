@@ -1,0 +1,67 @@
+.game-page {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.play-zone {
+  opacity: 1;
+  font-size: 4em;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  min-height: 100%;
+}
+
+.hide {
+  opacity: 0.5;
+  transition: opacity 5s linear;
+}
+
+.footer {
+  position: relative;
+  width: 100%;
+  background-color: red;
+}
+
+.footer {
+  height: 48px;
+  display: flex;
+}
+
+.game-text {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 120px - 60px);
+  min-width: 300px;
+  flex-grow: 1;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.guessed-button-wrapper {
+  height: 100%;
+  flex: 1;
+}
+
+.fail-button-wrapper {
+  flex: 1;
+  height: 100%;
+}
+
+.button {
+  font-size: 1.5em;
+  width: 100%;
+  height: 100%;
+}
+
+#fail-button {
+  color: white;
+  background-color: #eb5757;
+}
+
+#guessed-button {
+  color: white;
+  background-color: #219653;
+}
