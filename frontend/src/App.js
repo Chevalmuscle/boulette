@@ -60,8 +60,6 @@ export default class App extends Component {
     });
 
     socket.on("new-round", (roundIndex) => {
-      console.log("new round " + roundIndex);
-
       this.setReadyState(false);
       this.setState({ gameState: "round" });
     });
@@ -72,17 +70,14 @@ export default class App extends Component {
     });
 
     socket.on("new-word", (word) => {
-      console.log(word);
       this.setState({ word: word });
     });
 
     socket.on("counter", ({ timeLeft, totalTime }) => {
-      console.log(timeLeft + " / " + totalTime);
       this.setState({ timeLeft: timeLeft, totalTime: totalTime });
     });
 
     socket.on("times-up", () => {
-      console.log("time's up");
       this.setState({ timeIsOver: true });
     });
 

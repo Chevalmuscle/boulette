@@ -28,7 +28,6 @@ export default class Homepage extends Component {
 
   handleGenerateGame(e) {
     e.preventDefault();
-    console.log(this.state.turnLength);
     const gameData = { turnLength: parseInt(this.state.turnLength) };
     this.state.socket.emit("request-new-room", gameData);
   }
