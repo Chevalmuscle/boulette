@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 
 import { SOCKETIO_ENDPOINT } from "./config";
 
-import styles from "./Homepage.css";
+import styles from "./Homepage.module.css";
 
 const turnLengthOptions = [20, 30, 45, 60, 90, 120, 150, 180, 210, 240];
 
