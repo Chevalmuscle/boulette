@@ -155,6 +155,7 @@ module.exports = class Game {
     turnUpdate(
       this.roomid,
       this.players[this.currentPlayerIndex].id,
+      this.players[this.currentPlayerIndex].name,
       this.TURN_LENGTH,
     );
   }

@@ -126,9 +126,9 @@ function playerListUpdate(roomid, playerList) {
   io.in(roomid).emit("player-list", playerList);
 }
 
-function turnUpdate(roomid, currentPlayerid, turnLength) {
+function turnUpdate(roomid, currentPlayerid, currentPlayerName, turnLength) {
   console.log("Turn update in room " + roomid);
-  io.in(roomid).emit("new-turn", currentPlayerid);
+  io.in(roomid).emit("new-turn", { currentPlayerid, currentPlayerName });
   io.to(currentPlayerid).emit("new-word", games[roomid].getRandomWord());
 
   let timeLeft = turnLength;

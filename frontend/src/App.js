@@ -23,6 +23,7 @@ export default class App extends Component {
       timeLeft: undefined,
       timeIsOver: false,
       players: [],
+      playingPlayer: undefined,
       gameState: "choose-words",
     };
 
@@ -36,6 +37,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    const username = this.getUsername();
+
     const roomid = new URLSearchParams(this.props.location.search).get("room");
 
     if (roomid === null) {
@@ -45,7 +48,7 @@ export default class App extends Component {
     const socket = socketIOClient(SOCKETIO_ENDPOINT);
     socket.on("connect", () => this.setState({ playerid: socket.id }));
 
-    socket.emit("join-room", { roomid: roomid, playerName: "bob" });
+    socket.emit("join-room", { roomid: roomid, playerName: username });
 
     socket.on("invalid-room-id", () => {
       this.redirectToHomePage();
@@ -63,10 +66,9 @@ export default class App extends Component {
       this.setState({ gameState: "round" });
     });
 
-    socket.on("new-turn", (currentPlayerid) => {
-      console.log(currentPlayerid);
+    socket.on("new-turn", ({ currentPlayerid, currentPlayerName }) => {
       this.setState({ timeIsOver: false });
-      this.gameStart(currentPlayerid);
+      this.gameStart(currentPlayerid, currentPlayerName);
     });
 
     socket.on("new-word", (word) => {
@@ -87,6 +89,19 @@ export default class App extends Component {
     this.setState({ socket });
   }
 
+  getUsername() {
+    let username = localStorage.getItem("username");
+    if (username === null) {
+      // the user has not set its username
+      username = prompt("What's your name?", "");
+      if (username === null || username === "") {
+        username = "Not the NSA !";
+      }
+      localStorage.setItem("username", username);
+    }
+    return username;
+  }
+
   redirectToHomePage() {
     alert("Please generate a game first");
     this.props.history.push("/");
@@ -102,13 +117,13 @@ export default class App extends Component {
     this.setState({ isReady: isReady });
   }
 
-  gameStart(currentPlayerid) {
+  gameStart(currentPlayerid, playerName) {
     if (currentPlayerid === this.state.playerid) {
       // the player is playing
       this.setState({ timeIsOver: false, gameState: "playing" });
     } else {
       // the player is spectating
-      this.setState({ gameState: "spectating" });
+      this.setState({ gameState: "spectating", playingPlayer: playerName });
     }
   }
 
@@ -164,7 +179,7 @@ export default class App extends Component {
             />
           );
         case "spectating":
-          return <Spectate playZoneText={"(Tour de Bob Gratton)"} />;
+          return <Spectate playZoneText={`(Tour de ${this.state.playingPlayer})`} />;
         default:
           return <div>{`game state: ${this.state.gameState}`}</div>;
       }
