@@ -55,9 +55,8 @@ module.exports = class Game {
    * @param {boolean} isReady new ready state for the player
    */
   setPlayerReadyState(playerid, isReady) {
-    this.players[
-      this.players.findIndex((player) => player.id === playerid)
-    ].setIsReady(isReady);
+    const playerIndex = this.getPlayerIndex(playerid);
+    this.players[playerIndex].setIsReady(isReady);
     playerListUpdate(this.roomid, this.players);
   }
 
@@ -73,10 +72,17 @@ module.exports = class Game {
    * @param {string} playerid id of the player
    */
   getPlayerName(playerid) {
-    const playerIndex = this.players.findIndex(
-      (player) => player.id === playerid,
-    );
+    const playerIndex = this.getPlayerIndex(playerid);
     return this.players.slice(playerIndex, playerIndex + 1)[0].name;
+  }
+
+  /**
+   * Return the index in the this.players array of
+   * the corresponding playerid
+   * @param {string} playerid player's id
+   */
+  getPlayerIndex(playerid) {
+    return this.players.findIndex((player) => player.id === playerid);
   }
 
   /**
@@ -94,10 +100,8 @@ module.exports = class Game {
    * @param {string} playerid  id of the player
    */
   removePlayer(playerid) {
-    this.players.splice(
-      this.players.findIndex((player) => player.id === playerid),
-      1,
-    );
+    const playerIndex = this.getPlayerIndex(playerid);
+    this.players.splice(playerIndex, 1);
     playerListUpdate(this.roomid, this.players);
   }
 

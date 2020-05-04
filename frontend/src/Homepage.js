@@ -3,7 +3,9 @@ import socketIOClient from "socket.io-client";
 
 import { SOCKETIO_ENDPOINT } from "./config";
 
-import styles from "./Homepage.css";
+import styles from "./Homepage.module.css";
+
+const turnLengthOptions = [20, 30, 45, 60, 90, 120, 150, 180, 210, 240];
 
 export default class Homepage extends Component {
   constructor(props) {
@@ -45,16 +47,13 @@ export default class Homepage extends Component {
           <div>
             Turn length (in seconds):
             <select onChange={this.handleOnChange} name="turnLength" value={this.state.turnLength}>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="45">45</option>
-              <option value="60">60</option>
-              <option value="90">90</option>
-              <option value="120">120</option>
-              <option value="150">150</option>
-              <option value="180">180</option>
-              <option value="210">210</option>
-              <option value="240">240</option>
+              {turnLengthOptions.map((turnLengthOption, i) => {
+                return (
+                  <option key={i} value={turnLengthOption}>
+                    {turnLengthOption}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <button onClick={this.handleGenerateGame}>Generate game</button>
