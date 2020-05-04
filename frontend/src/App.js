@@ -103,7 +103,7 @@ export default class App extends Component {
   }
 
   setReadyState(isReady) {
-    this.state.socket.emit("player-ready-state-update", !this.state.isReady);
+    this.state.socket.emit("player-ready-state-update", isReady);
     this.setState({ isReady: isReady });
   }
 
@@ -128,7 +128,7 @@ export default class App extends Component {
 
   handleRoundStart(e) {
     e.preventDefault();
-    this.setReadyState(true);
+    this.setReadyState(!this.state.isReady);
   }
 
   handleGuessed(e) {
